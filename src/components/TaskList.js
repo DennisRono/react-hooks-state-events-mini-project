@@ -5,7 +5,7 @@ function TaskList({ tasks, removeItem }) {
   return (
     <div className="tasks">
       {tasks.map((item, index) => (
-        <Task task={item} key={index} removeItem={removeItem} />
+        <Task key={index} task={item} removeItem={removeItem} />
       ))}
     </div>
   )

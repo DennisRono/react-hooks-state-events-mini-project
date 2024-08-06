@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import CategoryFilter from './CategoryFilter'
 import NewTaskForm from './NewTaskForm'
 import TaskList from './TaskList'
-
 import { CATEGORIES, TASKS } from '../data'
+
 console.log("Here's the data you're working with")
 console.log({ CATEGORIES, TASKS })
 
@@ -28,7 +28,7 @@ function App() {
     }
   }, [mytasks, selected])
 
-  const handleNewProduct = (e, formData) => {
+  const onTaskFormSubmit = (e, formData) => {
     e.preventDefault()
     setMyTasks([...mytasks, formData])
   }
@@ -36,6 +36,7 @@ function App() {
   const removeItem = (item) => {
     setMyTasks(mytasks.filter((myitem) => myitem.text !== item.text))
   }
+
   return (
     <div className="App">
       <h2>My tasks</h2>
@@ -46,7 +47,7 @@ function App() {
       />
       <NewTaskForm
         categories={CATEGORIES}
-        handleNewProduct={handleNewProduct}
+        onTaskFormSubmit={onTaskFormSubmit}
       />
       <TaskList tasks={filteredTasks} removeItem={removeItem} />
     </div>

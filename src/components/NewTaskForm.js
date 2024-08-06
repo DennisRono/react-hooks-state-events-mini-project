@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 
-function NewTaskForm({ categories, handleNewProduct }) {
+function NewTaskForm({ categories, onTaskFormSubmit }) {
   const [formData, setFormData] = useState({
     text: '',
     category: '',
   })
+
   return (
     <form
       className="new-task-form"
-      onSubmit={(e) => handleNewProduct(e, formData)}
+      onSubmit={(e) => onTaskFormSubmit(e, formData)}
     >
       <label>
         Details
