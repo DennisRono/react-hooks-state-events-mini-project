@@ -1,57 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import { CATEGORIES, TASKS as initialTasks } from '../data'
 import CategoryFilter from './CategoryFilter'
 import NewTaskForm from './NewTaskForm'
 import TaskList from './TaskList'
-import { CATEGORIES, TASKS } from '../data'
 
-console.log("Here's the data you're working with")
-console.log({ CATEGORIES, TASKS })
+const App = () => {
+	const [tasks, setTasks] = useState(
+		initialTasks.map(t =>  ({id: uuid(), ...t}))
+	)
+	const [filter, setFilter] = useState('All')
+	const handleNewTask = newTask => setTasks([...tasks, newTask])
+	const handleFilter = e => setFilter(e.target.value)
 
-function App() {
-  const [selected, setSelected] = useState('')
-  const [mytasks, setMyTasks] = useState([])
-  const [filteredTasks, setFilteredTasks] = useState([])
-
-  useEffect(() => {
-    setMyTasks(TASKS)
-  }, [])
-
-  useEffect(() => {
-    if (selected !== '' && selected.toLowerCase() !== 'all') {
-      setFilteredTasks(
-        mytasks.filter(
-          (item) => item.category.toLowerCase() === selected.toLowerCase()
-        )
-      )
-    } else {
-      setFilteredTasks(mytasks)
-    }
-  }, [mytasks, selected])
-
-  const onTaskFormSubmit = (e, formData) => {
-    e.preventDefault()
-    setMyTasks([...mytasks, formData])
-  }
-
-  const removeItem = (item) => {
-    setMyTasks(mytasks.filter((myitem) => myitem.text !== item.text))
-  }
-
-  return (
-    <div className="App">
-      <h2>My tasks</h2>
-      <CategoryFilter
-        categories={CATEGORIES}
-        selected={selected}
-        setSelected={setSelected}
-      />
-      <NewTaskForm
-        categories={CATEGORIES}
-        onTaskFormSubmit={onTaskFormSubmit}
-      />
-      <TaskList tasks={filteredTasks} removeItem={removeItem} />
-    </div>
-  )
-}
+	return (
+		<div className='App'>
+			<h2>My tasks</h2>
+			<CategoryFilter categories={CATEGORIES} filter={filter} handleFilter={handleFilter} />
+			<NewTaskForm categories={CATEGORIES} onTaskFormSubmit={handleNewTask} />
+			<TaskList tasks={tasks} filter={filter} />
+		</div>
+)}
 
 export default App

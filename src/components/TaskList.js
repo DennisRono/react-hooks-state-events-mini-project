@@ -1,12 +1,14 @@
-import React from 'react'
 import Task from './Task'
 
-function TaskList({ tasks, removeItem }) {
+const TaskList = ({ tasks, filter }) => {
+  const taskList = tasks.filter(
+    (t) => !filter || filter === 'All' || t.category === filter
+  )
+  const renderTasks = taskList.map((t) => <Task key={t.text} {...t} />)
+
   return (
     <div className="tasks">
-      {tasks.map((item, index) => (
-        <Task key={index} task={item} removeItem={removeItem} />
-      ))}
+      <ul>{renderTasks}</ul>
     </div>
   )
 }

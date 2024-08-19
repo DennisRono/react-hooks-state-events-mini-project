@@ -1,41 +1,49 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { v4 as uuid } from 'uuid'
 
-function NewTaskForm({ categories, onTaskFormSubmit }) {
-  const [formData, setFormData] = useState({
-    text: '',
-    category: '',
+const initialState = {
+  text: '',
+  category: '',
+}
+
+const NewTaskForm = ({ categories, onTaskFormSubmit }) => {
+  const [form, setForm] = useState(initialState)
+
+  const renderCategories = categories.map((c) => {
+    return <option key={c} value={c} children={c} />
   })
 
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onTaskFormSubmit({
+      id: uuid(),
+      ...form,
+    })
+    setForm(initialState)
+  }
+
   return (
-    <form
-      className="new-task-form"
-      onSubmit={(e) => onTaskFormSubmit(e, formData)}
-    >
+    <form className="new-task-form" autoComplete="off" onSubmit={handleSubmit}>
       <label>
         Details
         <input
           type="text"
           name="text"
-          value={formData.text}
-          onChange={(e) => setFormData({ ...formData, text: e.target.value })}
+          value={form.text}
+          onChange={handleChange}
         />
       </label>
       <label>
         Category
-        <select
-          name="category"
-          value={formData.category}
-          onChange={(e) =>
-            setFormData({ ...formData, category: e.target.value })
-          }
-        >
-          {categories
-            .filter((cat) => cat !== 'All')
-            .map((item, index) => (
-              <option value={item} key={index}>
-                {item}
-              </option>
-            ))}
+        <select name="category" value={form.category} onChange={handleChange}>
+          {renderCategories}
         </select>
       </label>
       <input type="submit" value="Add task" />
